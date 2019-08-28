@@ -1,0 +1,27 @@
+.app-container {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+}
+
+main {
+	display: flex;
+	flex-direction: row;
+	flex: auto;
+}
+
+header {
+	margin-bottom: 25px;
+}
+
+.content-container {
+	flex: auto;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+	.navigation-container {
+		display: none;
+	}
+}
