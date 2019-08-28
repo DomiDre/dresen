@@ -10,6 +10,12 @@ const routes: Routes = [
     data: { animation: 'overview'}
   },
   {
+    path: 'blog',
+    loadChildren: () => import('@app/modules/blog/blog.module')
+                        .then(m => m.BlogModule),
+    // data: { animation: 'blog'}
+  },
+  {
     path: '',
     redirectTo: 'overview',
     pathMatch: 'full'
