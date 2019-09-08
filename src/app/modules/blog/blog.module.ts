@@ -14,7 +14,8 @@ import { HttpClient } from '@angular/common/http';
     CommonModule,
     SharedModule,
     MarkdownModule.forRoot({ loader: HttpClient }),
-    BlogRoutingModule
+    BlogRoutingModule,
+    
   ]
 })
 export class BlogModule { }

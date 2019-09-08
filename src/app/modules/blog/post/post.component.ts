@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { BlogService } from '../services/blog.service';
+import { Router } from'@angular/router';
 
 @Component({
   selector: 'app-post',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PostComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public blogService: BlogService,
+    private router: Router) { }
 
   ngOnInit() {
+    if(!this.blogService.viewPost) this.router.navigate(['/blog']);
   }
 
 }

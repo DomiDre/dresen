@@ -1,0 +1,15 @@
+<div class='content-card'>
+	<mat-card class='blog-snippet' *ngFor="let snippet of blogService.snippets">
+		<mat-card-header>
+			<mat-card-title>{{snippet.title}}</mat-card-title>
+			<mat-card-subtitle>{{snippet.timestamp*1000 | date: 'short'}}</mat-card-subtitle>
+		</mat-card-header>
+		<mat-card-content>
+			{{snippet.abstract}}
+		</mat-card-content>
+		<mat-card-actions align="end">
+			<button mat-button (click)='openBlogPost(snippet.id)'>READ FULL STORY</button>
+		</mat-card-actions>
+
+	</mat-card>
+</div>
