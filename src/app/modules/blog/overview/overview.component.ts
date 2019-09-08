@@ -15,6 +15,10 @@ export class OverviewComponent implements OnInit {
     public blogService: BlogService,
     private router: Router) { }
 
+  /**
+   * When the overview is loaded, fetch snippets from Firestore (or cache), show
+   * spinner until data is fetched.
+   */
   ngOnInit() {
     this.blogService.loadSnippets()
     .then(isLoaded => {
@@ -22,6 +26,10 @@ export class OverviewComponent implements OnInit {
     })
   }
 
+  /**
+   * When clicked, load the blog post from firestore and route to the post
+   * @param blogId id of the blog post in firestore
+   */
   async openBlogPost(blogId: string) {
     await this.blogService.getBlogpost(blogId);
     this.router.navigate(['/blog/post']);
