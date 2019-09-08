@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { fader } from './animations';
+import { AuthService } from '@shared/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,10 @@ import { fader } from './animations';
   ]
 })
 export class AppComponent {
-  title = 'dresen';
+
+  constructor(
+    private auth: AuthService,
+  ) { }
 
   prepareRoute(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation;

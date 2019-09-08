@@ -2,20 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { BlogPost, BlogSnippet } from '@shared/models/blog.models';
 
-class BlogSnippet {
-  id: string;
-  timestamp: number;
-  title: string;
-  abstract: string;
-}
-
-
-class BlogPost {
-  title: string;
-  timestamp: number;
-  content: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +23,7 @@ export class BlogService {
    * initiated an observable that tracks the recent snippets and updates list
    * accordingly.
    */
-  loadSnippets(): Promise<boolean> {
+  getSnippets(): Promise<BlogSnippet[]> {
     return new Promise((resolve, reject) => {
       if(!this.snippets) {
         // if snippets haven't been loaded, add observable that updates from db
@@ -49,15 +37,15 @@ export class BlogService {
             snippets.push({
               id: el.id,
               timestamp: el.timestamp,
-              abstract: el.abstract,
+              abstract: el.abstract.replace(/<br>/g,  '\n'),
               title: el.title
             })
           }
           this.snippets = snippets;
-          resolve(true);
+          resolve(this.snippets);
         })
       } else {
-        resolve(true);
+        resolve(this.snippets);
       }
     })
   }
@@ -67,7 +55,7 @@ export class BlogService {
    * get from cached data.
    * @param blogId Document id of desired blog post
    */
-  getBlogpost(blogId: string): Promise<boolean> {
+  getBlogpost(blogId: string): Promise<BlogPost> {
 
 
     return new Promise((resolve, reject) => {
@@ -78,11 +66,11 @@ export class BlogService {
           post.content = post.content.replace(/<br>/g,  '\n');
           this.loadedPosts[blogId] = post;
           this.viewPost = post;
-          resolve(true);
+          resolve(this.viewPost);
         })
       } else {
         this.viewPost = this.loadedPosts[blogId];
-        resolve(true);
+        resolve(this.viewPost);
       }
     })
   }

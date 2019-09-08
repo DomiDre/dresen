@@ -1,3 +1,5 @@
-<mat-card class='content-card' *ngIf="this.blogService.viewPost">
-	<markdown [data]="this.blogService.viewPost.content" lineNumbers ngPreserveWhitespaces></markdown>
-</mat-card>
+<div class='content-card'>
+	<mat-card *ngIf="this.blogService.viewPost">
+		<markdown [data]="this.blogService.viewPost.content" lineNumbers ngPreserveWhitespaces></markdown>
+	</mat-card>
+</div>

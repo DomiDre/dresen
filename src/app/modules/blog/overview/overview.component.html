@@ -1,11 +1,11 @@
-<div class='content-card'>
-	<mat-card class='blog-snippet' *ngFor="let snippet of blogService.snippets">
+<div class='content-card' *ngIf="blogService.snippets">
+	<mat-card class='blog-snippet' *ngFor="let snippet of blogService.snippets.slice().reverse()">
 		<mat-card-header>
 			<mat-card-title>{{snippet.title}}</mat-card-title>
-			<mat-card-subtitle>{{snippet.timestamp*1000 | date: 'short'}}</mat-card-subtitle>
+			<mat-card-subtitle>{{snippet.timestamp | date: 'short'}}</mat-card-subtitle>
 		</mat-card-header>
 		<mat-card-content>
-			{{snippet.abstract}}
+			<markdown [data]="snippet.abstract" lineNumbers ngPreserveWhitespaces></markdown>
 		</mat-card-content>
 		<mat-card-actions align="end">
 			<button mat-button (click)='openBlogPost(snippet.id)'>READ FULL STORY</button>

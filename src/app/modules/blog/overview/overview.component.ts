@@ -9,7 +9,7 @@ import { Router } from'@angular/router';
 })
 export class OverviewComponent implements OnInit {
 
-  isLoading = true;
+  isLoading: boolean;
 
   constructor(
     public blogService: BlogService,
@@ -20,9 +20,10 @@ export class OverviewComponent implements OnInit {
    * spinner until data is fetched.
    */
   ngOnInit() {
-    this.blogService.loadSnippets()
-    .then(isLoaded => {
-      this.isLoading = isLoaded;
+    this.isLoading = true;
+    this.blogService.getSnippets()
+    .then(_ => {
+      this.isLoading = false;
     })
   }
 

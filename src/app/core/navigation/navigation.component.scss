@@ -2,3 +2,12 @@
 	text-decoration: underline wavy;
 	font-weight: bold;
 }
+
+.dot {
+  height: 7px;
+	width: 7px;
+	margin-right: 3px;
+  background-color: #607d8b;
+  border-radius: 50%;
+  display: inline-block;
+}

@@ -8,18 +8,18 @@ import {
 
 export const fader =
   trigger('routeAnimations', [
-    transition('* <=> *', [
+    transition('PostComponent <=> OverviewComponent', [
       query(':enter, :leave', [
         style({
-          position: 'absolute',
+          position: 'relative',
           left: 0,
+          top: 0,
           width: '100%',
           opacity: 0,
-          transform: 'scale(0) translateY(100%)',
         }),
       ], {optional: true}),
       query(':enter', [
-        animate('600ms ease', style({ opacity: 1, transform: 'scale(1) translateY(0)' })),
+        animate('600ms ease', style({ opacity: 1 })),
       ], {optional: true})
     ]),
 ]);

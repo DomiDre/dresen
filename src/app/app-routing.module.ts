@@ -13,7 +13,13 @@ const routes: Routes = [
     path: 'blog',
     loadChildren: () => import('@app/modules/blog/blog.module')
                         .then(m => m.BlogModule),
-    // data: { animation: 'blog'}
+    data: { animation: 'blog'}
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('@app/modules/admin/admin.module')
+                        .then(m => m.AdminModule),
+    data: { animation: 'admin'}
   },
   {
     path: '',
