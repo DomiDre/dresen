@@ -16,6 +16,24 @@ const routes: Routes = [
     data: { animation: 'blog'}
   },
   {
+    path: 'projects',
+    loadChildren: () => import('@app/modules/projects/projects.module')
+                        .then(m => m.ProjectsModule),
+    data: { animation: 'projects'}
+  },
+  {
+    path: 'aboutme',
+    loadChildren: () => import('@app/modules/about-me/about-me.module')
+                        .then(m => m.AboutMeModule),
+    data: { animation: 'about-me'}
+  },
+  {
+    path: 'imprint',
+    loadChildren: () => import('@app/modules/imprint/imprint.module')
+                        .then(m => m.ImprintModule),
+    data: { animation: 'imprint'}
+  },
+  {
     path: 'admin',
     loadChildren: () => import('@app/modules/admin/admin.module')
                         .then(m => m.AdminModule),
