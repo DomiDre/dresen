@@ -12,17 +12,16 @@ export class AdminService {
     private db: AngularFirestore,
     private blogService: BlogService
   ) { }
-
+  
   /**
-   * Write a blog post to Firebase.
-   * New lines are replaced by <br> for storage
+   * Generates a snippet and post object for a prospective post
+   * @param title Title of Blog Post
+   * @param content Markdown String of Post
    */
-  writeBlogPost(title: string, content: string): Promise<void> {
-
+  generateSnippet(title: string, content: string, abstract?: string): [BlogPost, BlogSnippet] {
     const timestamp = Date.now();
     content = content.replace(/(\r\n|\n|\r)/gm,"<br>");
-    const abstract = content.split(' ').slice(0, 42).join(' ');
-    const docId = this.db.createId();  
+    abstract = abstract ? abstract : content.split(' ').slice(0, 42).join(' ');
     const blogPost: BlogPost = {
       title,
       content,
@@ -30,12 +29,23 @@ export class AdminService {
     }
 
     const blogSnippet: BlogSnippet = {
-      id: docId,
+      id: undefined,
       abstract,
       title,
       timestamp,
     }
 
+    return [blogPost, blogSnippet]
+  }
+
+  /**
+   * Write a blog post to Firebase.
+   * New lines are replaced by <br> for storage
+   */
+  writeBlogPost(blogPost: BlogPost, blogSnippet: BlogSnippet): Promise<void> {
+
+    const docId = this.db.createId();  
+    blogSnippet.id = docId;
 
     const batch = this.db.firestore.batch();
     batch.set(

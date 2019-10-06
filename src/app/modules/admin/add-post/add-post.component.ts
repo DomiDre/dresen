@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AdminService } from '../services/admin.service';
+import { BlogPost, BlogSnippet } from '@shared/models/blog.models';
 
 @Component({
   selector: 'app-add-post',
@@ -9,10 +10,11 @@ import { AdminService } from '../services/admin.service';
 export class AddPostComponent implements OnInit {
 
   @ViewChild('titleInput', {static: false}) titleInput;
+  @ViewChild('abstractBox', {static: false}) abstractBox;
   @ViewChild('textbox', {static: false}) textbox;
 
-  post_title: string;
-  post_content: string;
+  blogPost: BlogPost;
+  blogSnippet: BlogSnippet;
 
   constructor(private adminService: AdminService) { }
 
@@ -20,12 +22,17 @@ export class AddPostComponent implements OnInit {
   }
 
   generatePreview() {
-    this.post_title = this.titleInput.nativeElement.value;
-    this.post_content = this.textbox.nativeElement.value;
+    const post_title = this.titleInput.nativeElement.value;
+    const abstract = this.abstractBox.nativeElement.value;
+    const post_content = this.textbox.nativeElement.value;
+
+    [this.blogPost, this.blogSnippet] = this.adminService.generateSnippet(
+      post_title, post_content, abstract
+    );
   }
 
   post() {
-    this.adminService.writeBlogPost(this.post_title, this.post_content);
+    this.adminService.writeBlogPost(this.blogPost, this.blogSnippet);
   }
 
 }
