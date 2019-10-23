@@ -1,0 +1,55 @@
+<div class='card-content'>
+	<mat-card>
+		<mat-card-header>
+			<mat-card-title>Write a Blogpost</mat-card-title>
+		</mat-card-header>
+		<mat-card-content>
+			<mat-form-field>
+				<input matInput #titleInput maxlength="256" placeholder="Title">
+			</mat-form-field>
+			<mat-form-field class='full-width'>
+				<textarea matInput #abstractBox
+				cdkTextareaAutosize
+				#autosize="cdkTextareaAutosize"
+				cdkAutosizeMinRows="1"
+				cdkAutosizeMaxRows="10" placeholder="Abstract - Leave empty for auto generation"></textarea>
+			</mat-form-field>
+			<mat-form-field class='full-width'>
+				<textarea matInput #textbox
+				cdkTextareaAutosize
+				#autosize="cdkTextareaAutosize"
+				cdkAutosizeMinRows="1"
+				cdkAutosizeMaxRows="30" placeholder="Content"></textarea>
+			</mat-form-field>
+		</mat-card-content>
+		<mat-card-actions align="end">
+			<button mat-button (click)='generatePreview()'>SHOW PREVIEW</button>
+		</mat-card-actions>
+	</mat-card>
+	<div *ngIf="blogPost">
+		
+		<div style='margin-top:30px'>Abstract Preview:</div>
+		<mat-card style='margin-top:30px'>
+			<mat-card-header>
+				<mat-card-title>{{blogSnippet.title}}</mat-card-title>
+				<mat-card-subtitle>{{blogSnippet.timestamp | date: 'short'}}</mat-card-subtitle>
+			</mat-card-header>
+			<mat-card-content>
+				<markdown [data]="blogSnippet.abstract" lineNumbers ngPreserveWhitespaces katex></markdown>
+			</mat-card-content>
+		</mat-card>
+
+		<div style='margin-top:30px'>Blog Post Preview:</div>
+		<mat-card style='margin-top:30px'>
+			<mat-card-header>
+				<mat-card-title>{{blogPost.title}}</mat-card-title>
+			</mat-card-header>
+			<mat-card-content>
+				<markdown [data]="blogPost.content" lineNumbers ngPreserveWhitespaces katex></markdown>
+			</mat-card-content>
+			<mat-card-actions align="end">
+				<button mat-button (click)='post()'>POST</button>
+			</mat-card-actions>
+		</mat-card>
+	</div>
+</div>

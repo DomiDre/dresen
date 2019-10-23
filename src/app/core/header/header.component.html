@@ -1,8 +1,33 @@
 <mat-toolbar color="primary">
 	<div class='toolbar-content'>
-    <span>dresen.codes</span>
-    <mat-icon class='clickable' aria-hidden="false" aria-label="Menu Button">
-			menu
-		</mat-icon>
+		<a [routerLink]="['/blog']" class='clickable'>
+			<span>dresen.codes</span>
+		</a>
+		<span *ngIf="auth.authState">
+				<a [routerLink]="['/admin']">
+					<mat-icon aria-hidden="false" aria-label="add-post" color='accent'
+					matTooltip="Admin Menu">
+						account_box
+					</mat-icon>
+				</a>
+				<a [routerLink]="['/admin/addPost']">
+					<mat-icon aria-hidden="false" aria-label="add-post" color='accent'
+					matTooltip="Add Blogpost">
+						add
+					</mat-icon>
+				</a>
+				<a [routerLink]="['/admin/removePost']">
+					<mat-icon aria-hidden="false" aria-label="remove-post" color='accent'
+					matTooltip="Remove Blogpost">
+						remove
+					</mat-icon>
+				</a>
+				<span class='clickable' (click)='logout()'>
+					<mat-icon aria-hidden="false" aria-label="logout" color='accent'
+					matTooltip="Logout">
+						clear
+					</mat-icon>
+				</span>
+		</span>
 	</div>
 </mat-toolbar>

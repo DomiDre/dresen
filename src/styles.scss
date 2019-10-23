@@ -13,7 +13,7 @@
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $dresen-primary: mat-palette($mat-blue-gray);
-$dresen-accent: mat-palette($mat-light-blue);
+$dresen-accent: mat-palette($mat-amber);
 
 // The warn palette is optional (defaults to red).
 $dresen-warn: mat-palette($mat-red);
@@ -29,7 +29,13 @@ $dresen-theme: mat-light-theme($dresen-primary, $dresen-accent, $dresen-warn);
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; padding: 0; margin:0; }
+
 body { font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
 
 .border {
 	border: solid black 1px;
@@ -65,7 +71,7 @@ body { font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .content-card {
-  width: 90%;
+  width: 98%;
   margin: auto;
 }
 
