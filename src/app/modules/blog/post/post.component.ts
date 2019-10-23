@@ -17,4 +17,10 @@ export class PostComponent implements OnInit {
     if(!this.blogService.viewPost) this.router.navigate(['/blog']);
   }
 
+  /**
+   * When clicked, return to overview page
+   */
+  backToOverview() {
+    this.router.navigate(['/blog']);
+  }
 }
