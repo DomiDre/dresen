@@ -30,13 +30,14 @@
               "src/styles.scss",
               "node_modules/prismjs/themes/prism-okaidia.css",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
-              "node_modules/katex/dist/katex.css"
+              "node_modules/katex/dist/katex.min.css"
             ],
             "scripts": [
               "node_modules/prismjs/prism.js",
               "node_modules/prismjs/components/prism-csharp.min.js",
               "node_modules/prismjs/components/prism-css.min.js",
-              "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.js"
+              "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.js",
+              "node_modules/katex/dist/katex.min.js"
             ]
           },
           "configurations": {

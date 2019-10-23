@@ -1,5 +1,13 @@
 <div class='content-card'>
-	<mat-card *ngIf="this.blogService.viewPost">
-		<markdown [data]="this.blogService.viewPost.content" lineNumbers ngPreserveWhitespaces></markdown>
+	<mat-card style='margin: 10px 0px;' *ngIf="this.blogService.viewPost">
+		<mat-card-header>
+			<mat-card-title>{{this.blogService.viewPost.title}}</mat-card-title>
+			<mat-card-subtitle>{{this.blogService.viewPost.timestamp | date: 'short'}}</mat-card-subtitle>
+		</mat-card-header>
+		<mat-card-content>
+			<markdown [data]="this.blogService.viewPost.content"
+			lineNumbers ngPreserveWhitespaces katex>
+			</markdown>
+		</mat-card-content>
 	</mat-card>
 </div>

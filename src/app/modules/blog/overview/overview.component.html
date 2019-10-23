@@ -5,7 +5,7 @@
 			<mat-card-subtitle>{{snippet.timestamp | date: 'short'}}</mat-card-subtitle>
 		</mat-card-header>
 		<mat-card-content>
-			<markdown [data]="snippet.abstract" lineNumbers ngPreserveWhitespaces useKatex></markdown>
+			<markdown [data]="snippet.abstract" lineNumbers ngPreserveWhitespaces katex></markdown>
 		</mat-card-content>
 		<mat-card-actions align="end">
 			<button mat-button (click)='openBlogPost(snippet.id)'>READ FULL STORY</button>
