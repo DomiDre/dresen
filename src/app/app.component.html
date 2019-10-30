@@ -4,11 +4,13 @@
   </header>
   
   <main>
-    <div class='navigation-container'>
-      <app-navigation></app-navigation>
-    </div>
-    <div class="content-container" [@routeAnimations]="prepareRoute(o)">
-      <router-outlet #o="outlet"></router-outlet>
+    <div class='main-container'>
+      <!-- <div class='navigation-container'>
+        <app-navigation></app-navigation>
+      </div> -->
+      <div class="content-container" [@routeAnimations]="prepareRoute(o)">
+        <router-outlet #o="outlet"></router-outlet>
+      </div>
     </div>
   </main>
       
