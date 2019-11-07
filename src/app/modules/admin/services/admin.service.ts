@@ -20,7 +20,6 @@ export class AdminService {
    */
   generateSnippet(title: string, content: string, abstract?: string): [BlogPost, BlogSnippet] {
     const timestamp = Date.now();
-    content = content.replace(/(\r\n|\n|\r)/gm,"<br>");
     abstract = abstract ? abstract : content.split(' ').slice(0, 42).join(' ');
     const blogPost: BlogPost = {
       title,
@@ -47,6 +46,10 @@ export class AdminService {
     const docId = this.db.createId();  
     blogSnippet.id = docId;
 
+    // for storage in DB replace \n by <br>
+    blogPost.content = blogPost.content.replace(/(\r\n|\n|\r)/gm,"<br>");
+    blogSnippet.abstract = blogSnippet.abstract.replace(/(\r\n|\n|\r)/gm,"<br>");
+    
     const batch = this.db.firestore.batch();
     batch.set(
       this.db.collection('blog_posts').doc(docId).ref,
