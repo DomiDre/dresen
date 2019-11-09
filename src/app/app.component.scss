@@ -16,6 +16,7 @@ main {
 .main-container {
 	display: flex;
 	flex-direction: row;
+	width: 100%;
 	max-width: 800px;
 }
 
@@ -25,6 +26,7 @@ header {
 
 .content-container {
 	flex: auto;
+	width: 100%;
 }
 
 @media only screen and (max-width: 800px) {
