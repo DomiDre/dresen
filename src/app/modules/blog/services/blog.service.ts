@@ -39,7 +39,8 @@ export class BlogService {
               id: el.id,
               timestamp: el.timestamp,
               abstract: el.abstract.replace(/<br>/g,  '\n'),
-              title: el.title
+              title: el.title,
+              topic: el.topic
             })
           }
           this.snippets = snippets;
