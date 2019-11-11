@@ -7,6 +7,15 @@
 			<mat-form-field>
 				<input matInput #titleInput maxlength="256" placeholder="Title">
 			</mat-form-field>
+			<br />
+			<mat-form-field>
+				<mat-label>Topic</mat-label>
+				<mat-select [(value)]='selectedTopic'>
+					<mat-option *ngFor='let topic of topics' [value]=topic>
+						{{topic}}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
 			<mat-form-field class='full-width'>
 				<textarea matInput #abstractBox
 				cdkTextareaAutosize

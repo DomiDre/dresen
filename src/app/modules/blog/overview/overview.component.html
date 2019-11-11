@@ -2,7 +2,7 @@
 	<mat-card class='blog-snippet' *ngFor="let snippet of blogService.snippets.slice().reverse()">
 		<mat-card-header>
 			<mat-card-title>{{snippet.title}}</mat-card-title>
-			<mat-card-subtitle>{{snippet.timestamp | date: 'short'}}</mat-card-subtitle>
+			<mat-card-subtitle>{{snippet.timestamp | date: 'short'}} - {{snippet.topic}}</mat-card-subtitle>
 		</mat-card-header>
 		<mat-card-content>
 			<markdown [data]="snippet.abstract" lineNumbers ngPreserveWhitespaces katex></markdown>
