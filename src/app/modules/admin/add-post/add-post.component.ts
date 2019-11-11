@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AdminService } from '../services/admin.service';
 import { BlogPost, BlogSnippet } from '@shared/models/blog.models';
+import { BlogService } from '@app/modules/blog/services/blog.service';
 
 @Component({
   selector: 'app-add-post',
@@ -16,12 +17,17 @@ export class AddPostComponent implements OnInit {
   blogPost: BlogPost;
   blogSnippet: BlogSnippet;
 
-  topics: string[] = ['general', 'machine learning', 'blockchain', 'how-to']
+  topics: string[];
   selectedTopic: string;
 
-  constructor(private adminService: AdminService) { }
+  constructor(private adminService: AdminService,
+    public blogService: BlogService) { }
 
   ngOnInit() {
+    this.blogService.getTopics()
+    .then(topics => {
+      this.topics = topics;
+    })
   }
 
   generatePreview() {

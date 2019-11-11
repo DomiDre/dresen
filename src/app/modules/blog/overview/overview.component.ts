@@ -21,7 +21,12 @@ export class OverviewComponent implements OnInit {
    */
   ngOnInit() {
     this.isLoading = true;
-    this.blogService.getSnippets()
+
+    const loadingPromises = [];
+    loadingPromises.push(this.blogService.getSnippets());
+    loadingPromises.push(this.blogService.getTopics());
+    
+    Promise.all(loadingPromises)
     .then(_ => {
       this.isLoading = false;
     })
