@@ -18,13 +18,14 @@ export class AdminService {
    * @param title Title of Blog Post
    * @param content Markdown String of Post
    */
-  generateSnippet(title: string, content: string, abstract?: string): [BlogPost, BlogSnippet] {
+  generateSnippet(title: string, content: string, topic: string,  abstract?: string): [BlogPost, BlogSnippet] {
     const timestamp = Date.now();
     abstract = abstract ? abstract : content.split(' ').slice(0, 42).join(' ');
     const blogPost: BlogPost = {
       title,
       content,
-      timestamp
+      timestamp,
+      topic
     }
 
     const blogSnippet: BlogSnippet = {
@@ -32,6 +33,7 @@ export class AdminService {
       abstract,
       title,
       timestamp,
+      topic
     }
 
     return [blogPost, blogSnippet]
@@ -59,6 +61,10 @@ export class AdminService {
       this.db.collection('blog_snippets').doc('recent').ref,
       { content: firebase.firestore.FieldValue.arrayUnion(blogSnippet)}
     )
+    batch.update(
+      this.db.collection('blog_snippets').doc(blogSnippet.topic).ref,
+      { content: firebase.firestore.FieldValue.arrayUnion(blogSnippet)}
+    )
     return batch.commit();
   }
 
@@ -76,6 +82,10 @@ export class AdminService {
     batch.delete(docRef);
     batch.update(
       this.db.collection('blog_snippets').doc('recent').ref,
+      { content: firebase.firestore.FieldValue.arrayRemove(blogSnippet)}
+    );
+    batch.update(
+      this.db.collection('blog_snippets').doc(blogSnippet.topic).ref,
       { content: firebase.firestore.FieldValue.arrayRemove(blogSnippet)}
     );
     return batch.commit();

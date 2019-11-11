@@ -16,6 +16,9 @@ export class AddPostComponent implements OnInit {
   blogPost: BlogPost;
   blogSnippet: BlogSnippet;
 
+  topics: string[] = ['general', 'machine learning', 'blockchain', 'how-to']
+  selectedTopic: string;
+
   constructor(private adminService: AdminService) { }
 
   ngOnInit() {
@@ -25,6 +28,7 @@ export class AddPostComponent implements OnInit {
     const post_title = this.titleInput.nativeElement.value;
     const abstract = this.abstractBox.nativeElement.value;
     const post_content = this.textbox.nativeElement.value;
+    let topic = this.selectedTopic;
 
     [this.blogPost, this.blogSnippet] = this.adminService.generateSnippet(
       post_title, post_content, abstract
