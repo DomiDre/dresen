@@ -1,14 +1,32 @@
 <div class='content-card' *ngIf="blogService.snippets">
-	<mat-card class='blog-snippet' *ngFor="let snippet of blogService.snippets.slice().reverse()">
+	<mat-card class='blog-snippet' 
+	*ngFor="let snippet of blogService.snippets.slice().reverse()">
 		<mat-card-header>
-			<mat-card-title>{{snippet.title}}</mat-card-title>
-			<mat-card-subtitle>{{snippet.timestamp | date: 'short'}} - {{snippet.topic}}</mat-card-subtitle>
+			<mat-card-title>
+				{{snippet.title}}
+				<span *ngIf="auth.authState">
+					<button mat-icon-button aria-label="Edit button"
+					(click)='editPost(snippet)'>
+						<mat-icon aria-hidden="false" aria-label="edit-post"
+						color='accent'
+						matTooltip="Edit Blogpost">
+							edit
+						</mat-icon>
+					</button>
+				</span>
+			</mat-card-title>
+			<mat-card-subtitle>
+				{{snippet.timestamp | date: 'short'}} - {{snippet.topic}}
+			</mat-card-subtitle>
 		</mat-card-header>
 		<mat-card-content>
-			<markdown [data]="snippet.abstract" lineNumbers ngPreserveWhitespaces katex></markdown>
+			<markdown [data]="snippet.abstract" lineNumbers 
+			ngPreserveWhitespaces katex></markdown>
 		</mat-card-content>
 		<mat-card-actions align="end">
-			<button mat-button (click)='openBlogPost(snippet.id)'>READ FULL STORY</button>
+			<button mat-button (click)='openBlogPost(snippet)'>
+				READ FULL STORY
+			</button>
 		</mat-card-actions>
 
 	</mat-card>
