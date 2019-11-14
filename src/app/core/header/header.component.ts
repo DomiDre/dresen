@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '@shared/services/auth.service';
 
 @Component({
@@ -6,17 +6,17 @@ import { AuthService } from '@shared/services/auth.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
   constructor(
-    public auth: AuthService,
+    public auth: AuthService
   ) { }
 
-  ngOnInit() {
-  }
-
-  logout() {
-    this.auth.logout();
+  logout(): void {
+    this.auth.logout()
+    .catch(error => {
+      console.error('Error during logout: ', error);
+    });
   }
 
 }

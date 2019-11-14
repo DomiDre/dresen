@@ -20,24 +20,25 @@ export class AddPostComponent implements OnInit {
   topics: string[];
   selectedTopic: string;
 
-  constructor(private adminService: AdminService,
+  constructor(
+    private adminService: AdminService,
     public blogService: BlogService) { }
 
   ngOnInit() {
     this.blogService.getTopics()
     .then(topics => {
       this.topics = topics;
-    })
+    });
   }
 
   generatePreview() {
-    const post_title = this.titleInput.nativeElement.value;
+    const postTitle = this.titleInput.nativeElement.value;
     const abstract = this.abstractBox.nativeElement.value;
-    const post_content = this.textbox.nativeElement.value;
-    let topic = this.selectedTopic;
+    const postContent = this.textbox.nativeElement.value;
+    const topic = this.selectedTopic;
 
     [this.blogPost, this.blogSnippet] = this.adminService.generateSnippet(
-      post_title, post_content, this.selectedTopic, abstract
+      postTitle, postContent, topic, abstract
     );
   }
 

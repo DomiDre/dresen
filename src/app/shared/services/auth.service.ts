@@ -8,19 +8,20 @@ export class AuthService {
   authState;
 
   constructor(
-    private afAuth: AngularFireAuth,
-  ) { 
+    private readonly afAuth: AngularFireAuth
+  ) {
     this.afAuth.auth.onAuthStateChanged(user => {
       this.authState = user;
     });
  }
 
-  async emailLogin(email: string, password: string): Promise<firebase.auth.UserCredential> {
+  async emailLogin(email: string,
+                   password: string): Promise<firebase.auth.UserCredential> {
     // Login via Email + Password
     return this.afAuth.auth.signInWithEmailAndPassword(email, password);
   }
-  
-  logout(): Promise<void> {
+
+  async logout(): Promise<void> {
     return this.afAuth.auth.signOut();
   }
 }

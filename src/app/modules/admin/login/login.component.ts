@@ -31,8 +31,10 @@ export class LoginComponent implements OnInit {
 
   getErrorMessage() {
     return (
-      this.formControl.email.hasError('required') ? 'E-Mail eingeben zum einloggen' :
-      this.formControl.email.hasError('email') ? 'Keine gültige E-Mail' :
+      this.formControl.email
+      .hasError('required') ? 'E-Mail eingeben zum einloggen' :
+      this.formControl.email
+      .hasError('email') ? 'Keine gültige E-Mail' :
       ''
     );
   }
@@ -49,7 +51,7 @@ export class LoginComponent implements OnInit {
       this.formControl.email.value,
       this.formControl.password.value
     ).then(data => {
-      this.router.navigate(['/blog'])
+      this.router.navigate(['/blog']);
     }).catch(error => {
       console.log(error);
       if (error.code) {
@@ -59,7 +61,8 @@ export class LoginComponent implements OnInit {
             break;
           }
           case 'auth/user-not-found': {
-            this.loginError = 'Benutzer nicht gefunden. Bist du überhaupt der Admin?';
+            this.loginError =
+              'Benutzer nicht gefunden. Bist du überhaupt der Admin?';
             break;
           }
         }

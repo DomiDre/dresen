@@ -14,10 +14,12 @@ import { AuthService } from '@shared/services/auth.service';
 export class AppComponent {
 
   constructor(
-    private auth: AuthService,
+    private readonly auth: AuthService,
   ) { }
 
-  prepareRoute(outlet: RouterOutlet) {
-    return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation;
+  prepareRoute(outlet: RouterOutlet): void {
+    return outlet
+           && outlet.activatedRouteData
+           && outlet.activatedRouteData.animation;
   }
 }
