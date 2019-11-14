@@ -1,0 +1,69 @@
+<div class='card-content' *ngIf="blogService.viewPost">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Edit a Blogpost</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-form-field class='full-width'>
+                <input matInput #titleInput maxlength="256" placeholder="Title"
+                [value]="blogService.viewPost.title">
+            </mat-form-field>
+            <br />
+            <mat-form-field>
+                <mat-label>Topic</mat-label>
+                <mat-select [(value)]='selectedTopic'>
+                    <mat-option *ngFor='let topic of topics' [value]=topic>
+                        {{topic}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class='full-width'>
+                <textarea matInput #abstractBox
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="10" placeholder="Abstract"
+                [value]=blogService.viewSnippet.abstract></textarea>
+            </mat-form-field>
+            <mat-form-field class='full-width'>
+                <textarea matInput #textbox
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="30" placeholder="Content"
+                [value]=blogService.viewPost.content></textarea>
+            </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button (click)='generatePreview()'>SHOW PREVIEW</button>
+        </mat-card-actions>
+    </mat-card>
+    <div *ngIf="blogPost">
+        <div style='margin-top:30px'>Abstract Preview:</div>
+        <mat-card style='margin-top:30px'>
+            <mat-card-header>
+                <mat-card-title>{{blogSnippet.title}}</mat-card-title>
+                <mat-card-subtitle>
+                    {{blogSnippet.timestamp | date: 'short'}} - {{blogSnippet.topic}}
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <markdown [data]="blogSnippet.abstract" lineNumbers ngPreserveWhitespaces katex></markdown>
+            </mat-card-content>
+        </mat-card>
+
+        <div style='margin-top:30px'>Blog Post Preview:</div>
+        <mat-card style='margin-top:30px'>
+            <mat-card-header>
+                <mat-card-title>{{blogPost.title}}</mat-card-title>
+                <mat-card-subtitle>{{blogPost.timestamp | date: 'short'}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <markdown [data]="blogPost.content" lineNumbers ngPreserveWhitespaces katex></markdown>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button mat-button (click)='post()'>UPDATE POST</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>

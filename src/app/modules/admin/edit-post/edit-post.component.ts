@@ -1,14 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router'
+import { BlogService } from '@app/modules/blog/services/blog.service';
 import { AdminService } from '../services/admin.service';
 import { BlogPost, BlogSnippet } from '@shared/models/blog.models';
-import { BlogService } from '@app/modules/blog/services/blog.service';
 
 @Component({
-  selector: 'app-add-post',
-  templateUrl: './add-post.component.html',
-  styleUrls: ['./add-post.component.scss']
+  selector: 'app-edit-post',
+  templateUrl: './edit-post.component.html',
+  styleUrls: ['./edit-post.component.scss']
 })
-export class AddPostComponent implements OnInit {
+export class EditPostComponent implements OnInit {
 
   @ViewChild('titleInput', {static: false}) titleInput;
   @ViewChild('abstractBox', {static: false}) abstractBox;
@@ -20,13 +21,18 @@ export class AddPostComponent implements OnInit {
   topics: string[];
   selectedTopic: string;
 
-  constructor(private adminService: AdminService,
-    public blogService: BlogService) { }
+  constructor(
+    public blogService: BlogService,
+    private adminService: AdminService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
+    if(!this.blogService.viewPost) this.router.navigate(['/blog']);
     this.blogService.getTopics()
     .then(topics => {
       this.topics = topics;
+      this.selectedTopic = this.blogService.viewPost.topic;
     })
   }
 
@@ -37,12 +43,14 @@ export class AddPostComponent implements OnInit {
     let topic = this.selectedTopic;
 
     [this.blogPost, this.blogSnippet] = this.adminService.generateSnippet(
-      post_title, post_content, this.selectedTopic, abstract
+      post_title, post_content, topic, abstract,
+      this.blogService.viewSnippet.timestamp,
+      this.blogService.viewSnippet.id
     );
   }
 
   post() {
-    this.adminService.writeBlogPost(this.blogPost, this.blogSnippet);
+    this.adminService.editBlogPost(this.blogPost, this.blogSnippet);
   }
 
 }

@@ -14,6 +14,7 @@ export class BlogService {
   snippets: BlogSnippet[];
 
   loadedPosts: { [id: string] : BlogPost } = {};
+  viewSnippet: BlogSnippet;
   viewPost: BlogPost;
   topics: string[];
 

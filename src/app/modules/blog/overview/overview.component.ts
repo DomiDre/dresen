@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { BlogService } from '../services/blog.service';
 import { Router } from'@angular/router';
+import { AuthService } from '@shared/services/auth.service';
+import { BlogSnippet } from '~/app/shared/models/blog.models';
 
 @Component({
   selector: 'app-overview',
@@ -12,6 +14,7 @@ export class OverviewComponent implements OnInit {
   isLoading: boolean;
 
   constructor(
+    public auth: AuthService,
     public blogService: BlogService,
     private router: Router) { }
 
@@ -36,9 +39,20 @@ export class OverviewComponent implements OnInit {
    * When clicked, load the blog post from firestore and route to the post
    * @param blogId id of the blog post in firestore
    */
-  async openBlogPost(blogId: string) {
-    await this.blogService.getBlogpost(blogId);
+  async openBlogPost(snippet: BlogSnippet) {
+    this.blogService.viewSnippet = snippet;
+    await this.blogService.getBlogpost(snippet.id);
     this.router.navigate(['/blog/post']);
+  }
+
+  /**
+   * Admin method to edit a specific blog post
+   * @param blogId id of the blog post in firestore
+   */
+  async editPost(snippet: BlogSnippet) {
+    this.blogService.viewSnippet = snippet;
+    await this.blogService.getBlogpost(snippet.id);
+    this.router.navigate(['/admin/editPost']);
   }
 
 }
