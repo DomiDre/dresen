@@ -38,6 +38,7 @@
               "node_modules/prismjs/prism.js",
               "node_modules/prismjs/components/prism-python.min.js",
               "node_modules/prismjs/components/prism-rust.min.js",
+              "node_modules/prismjs/components/prism-toml.min.js",
               "node_modules/prismjs/components/prism-typescript.min.js",
               "node_modules/prismjs/components/prism-css.min.js",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.js",
