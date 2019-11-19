@@ -2,13 +2,13 @@ import { Routes } from '@angular/router';
 import { OverviewComponent } from './overview/overview.component';
 
 export const routableComponents = [
-	OverviewComponent
+  OverviewComponent
 ];
 
 
 export const routes: Routes = [
-	{
-		path: '',
-		component: OverviewComponent
-	}
+  {
+    path: '',
+    component: OverviewComponent
+  }
 ];

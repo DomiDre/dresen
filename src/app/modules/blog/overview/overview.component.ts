@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BlogService } from '../services/blog.service';
-import { Router } from'@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '@shared/services/auth.service';
 import { BlogSnippet } from '~/app/shared/models/blog.models';
 
@@ -28,11 +28,11 @@ export class OverviewComponent implements OnInit {
     const loadingPromises = [];
     loadingPromises.push(this.blogService.getSnippets());
     loadingPromises.push(this.blogService.getTopics());
-    
+
     Promise.all(loadingPromises)
     .then(_ => {
       this.isLoading = false;
-    })
+    });
   }
 
   /**

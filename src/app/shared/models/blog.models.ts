@@ -6,7 +6,6 @@ export class BlogSnippet {
   topic: string;
 }
 
-
 export class BlogPost {
   title: string;
   timestamp: number;

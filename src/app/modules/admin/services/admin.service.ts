@@ -16,22 +16,23 @@ export class AdminService {
     private blogService: BlogService,
     private router: Router
   ) { }
-  
+
   /**
    * Generates a snippet and post object for a prospective post
    * @param title Title of Blog Post
    * @param content Markdown String of Post
    */
-  generateSnippet(title: string, content: string, topic: string, 
-    abstract?: string, timestamp?: number, id?: string): [BlogPost, BlogSnippet] {
-    if (!timestamp) timestamp = Date.now();
+  generateSnippet(title: string, content: string, topic: string,
+                  abstract?: string, timestamp?: number,
+                  id?: string): [BlogPost, BlogSnippet] {
+    if (!timestamp) { timestamp = Date.now(); }
     abstract = abstract ? abstract : content.split(' ').slice(0, 42).join(' ');
     const blogPost: BlogPost = {
       title,
       content,
       timestamp,
       topic
-    }
+    };
 
     const blogSnippet: BlogSnippet = {
       id,
@@ -39,28 +40,30 @@ export class AdminService {
       title,
       timestamp,
       topic
-    }
+    };
 
-    return [blogPost, blogSnippet]
+    return [blogPost, blogSnippet];
   }
 
   /**
    * Write a blog post to Firebase.
    * New lines are replaced by <br> for storage
    */
-  async writeBlogPost(blogPost: BlogPost, blogSnippet: BlogSnippet): Promise<void> {
+  async writeBlogPost(blogPost: BlogPost,
+                      blogSnippet: BlogSnippet): Promise<void> {
     if (blogSnippet.id) {
       console.error(
-        "writeBlogPost() should not be used with already added posts. " +
-        "Use editBlogPost() if id is already defined")
+        'writeBlogPost() should not be used with already added posts. ' +
+        'Use editBlogPost() if id is already defined');
     }
-    const docId = this.db.createId();  
+    const docId = this.db.createId();
     blogSnippet.id = docId;
 
     // for storage in DB replace \n by <br>
-    blogPost.content = blogPost.content.replace(/(\r\n|\n|\r)/gm,"<br>");
-    blogSnippet.abstract = blogSnippet.abstract.replace(/(\r\n|\n|\r)/gm,"<br>");
-    
+    blogPost.content = blogPost.content.replace(/(\r\n|\n|\r)/gm, '<br>');
+    blogSnippet.abstract = blogSnippet.abstract
+    .replace(/(\r\n|\n|\r)/gm, '<br>');
+
     const batch = this.db.firestore.batch();
     batch.set(
       this.db.collection('blog_posts').doc(docId).ref,
@@ -69,11 +72,11 @@ export class AdminService {
     batch.update(
       this.db.collection('blog_snippets').doc('recent').ref,
       { content: firebase.firestore.FieldValue.arrayUnion(blogSnippet)}
-    )
+    );
     batch.update(
       this.db.collection('blog_snippets').doc(blogSnippet.topic).ref,
       { content: firebase.firestore.FieldValue.arrayUnion(blogSnippet)}
-    )
+    );
     await batch.commit();
     this.router.navigate(['/']);
   }
@@ -84,9 +87,9 @@ export class AdminService {
    */
   async removeBlogPost(blogId: string): Promise<void> {
     const docRef = this.db.doc<BlogPost>('blog_posts/' + blogId).ref;
-    const snippets = await this.blogService.getSnippets()
+    const snippets = await this.blogService.getSnippets();
     console.log(snippets);
-    const blogSnippet = snippets.find(element => element.id === blogId)
+    const blogSnippet = snippets.find(element => element.id === blogId);
 
     const batch = this.db.firestore.batch();
     batch.delete(docRef);
@@ -104,39 +107,44 @@ export class AdminService {
   /**
    * Edit an existing blog post.
    */
-  async editBlogPost(blogPost: BlogPost, blogSnippet: BlogSnippet): Promise<void> {
+  async editBlogPost(blogPost: BlogPost,
+                     blogSnippet: BlogSnippet): Promise<void> {
     if (!blogSnippet.id) {
-      console.error("Provided blog snippet without an ID");
-      return
+      console.error('Provided blog snippet without an ID');
+      return;
     }
-    
-    const read_snippets_promises = [];
 
-    read_snippets_promises.push(
+    const snippetPromises = [];
+
+    snippetPromises.push(
       this.db.firestore.collection('blog_snippets').doc('recent').get()
     );
-    read_snippets_promises.push(
+    snippetPromises.push(
       this.db.firestore.collection('blog_snippets').doc(blogSnippet.topic).get()
-    )
-    
-    let [recent_snippets, topic_snippets] = await Promise.all(read_snippets_promises);
-    if (recent_snippets.exists && topic_snippets.exists) {
-      recent_snippets = recent_snippets.data();
-      topic_snippets = topic_snippets.data();
+    );
+
+    let [recentSnippets, topicSnippets] = await Promise.all(snippetPromises);
+    if (recentSnippets.exists && topicSnippets.exists) {
+      recentSnippets = recentSnippets.data();
+      topicSnippets = topicSnippets.data();
     } else {
-      console.error("Did not find snippets");
-      return
+      console.error('Did not find snippets');
+      return;
     }
 
-    const id_recent = recent_snippets.content.findIndex(element => element.id === blogSnippet.id)
-    const id_topic = topic_snippets.content.findIndex(element => element.id === blogSnippet.id)
+    const idxRecent = recentSnippets.content.findIndex(
+      element => element.id === blogSnippet.id);
+    const idxTopic = topicSnippets.content.findIndex(
+      element => element.id === blogSnippet.id);
 
-    recent_snippets.content[id_recent] = blogSnippet
-    topic_snippets.content[id_topic] = blogSnippet
+    recentSnippets.content[idxRecent] = blogSnippet;
+    topicSnippets.content[idxTopic] = blogSnippet;
 
-    blogPost.content = blogPost.content.replace(/(\r\n|\n|\r)/gm,"<br>");
-    blogSnippet.abstract = blogSnippet.abstract.replace(/(\r\n|\n|\r)/gm,"<br>");
-    
+    blogPost.content = blogPost.content.replace(
+      /(\r\n|\n|\r)/gm, '<br>');
+    blogSnippet.abstract = blogSnippet.abstract.replace(
+      /(\r\n|\n|\r)/gm, '<br>');
+
     const batch = this.db.firestore.batch();
     batch.update(
       this.db.collection('blog_posts').doc(blogSnippet.id).ref,
@@ -144,12 +152,12 @@ export class AdminService {
     );
     batch.update(
       this.db.collection('blog_snippets').doc('recent').ref,
-      recent_snippets
-    )
+      recentSnippets
+    );
     batch.update(
       this.db.collection('blog_snippets').doc(blogSnippet.topic).ref,
-      topic_snippets
-    )
+      topicSnippets
+    );
     await batch.commit();
     this.router.navigate(['/']);
   }

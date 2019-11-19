@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from './material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -8,8 +7,8 @@ import { MarkdownModule } from 'ngx-markdown';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireAuthModule }  from '@angular/fire/auth';
-import { environment } from '~/environments/environment';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { environment } from '@env/environment';
 import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
 @NgModule({

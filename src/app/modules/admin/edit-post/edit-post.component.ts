@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router'
+import { Router } from '@angular/router';
 import { BlogService } from '@app/modules/blog/services/blog.service';
 import { AdminService } from '../services/admin.service';
 import { BlogPost, BlogSnippet } from '@shared/models/blog.models';
@@ -28,22 +28,22 @@ export class EditPostComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if(!this.blogService.viewPost) this.router.navigate(['/blog']);
+    if (!this.blogService.viewPost) { this.router.navigate(['/blog']); }
     this.blogService.getTopics()
     .then(topics => {
       this.topics = topics;
       this.selectedTopic = this.blogService.viewPost.topic;
-    })
+    });
   }
 
   generatePreview() {
-    const post_title = this.titleInput.nativeElement.value;
+    const postTitle = this.titleInput.nativeElement.value;
     const abstract = this.abstractBox.nativeElement.value;
-    const post_content = this.textbox.nativeElement.value;
-    let topic = this.selectedTopic;
+    const postContent = this.textbox.nativeElement.value;
+    const topic = this.selectedTopic;
 
     [this.blogPost, this.blogSnippet] = this.adminService.generateSnippet(
-      post_title, post_content, topic, abstract,
+      postTitle, postContent, topic, abstract,
       this.blogService.viewSnippet.timestamp,
       this.blogService.viewSnippet.id
     );

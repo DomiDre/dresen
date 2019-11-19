@@ -3,18 +3,18 @@ import { PostComponent } from './post/post.component';
 import { OverviewComponent } from './overview/overview.component';
 
 export const routableComponents = [
-	PostComponent,
-	OverviewComponent
+  PostComponent,
+  OverviewComponent
 ];
 
 
 export const routes: Routes = [
-	{
-		path: '',
-		component: OverviewComponent
-	},
-	{
-		path: 'post',
-		component: PostComponent
-	}
+  {
+    path: '',
+    component: OverviewComponent
+  },
+  {
+    path: 'post',
+    component: PostComponent
+  }
 ];

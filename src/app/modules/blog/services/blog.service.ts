@@ -10,10 +10,10 @@ import { BlogPost, BlogSnippet } from '@shared/models/blog.models';
 })
 export class BlogService {
 
-  obs_snippets: Observable<any>;
+  obsSnippets: Observable<any>;
   snippets: BlogSnippet[];
 
-  loadedPosts: { [id: string] : BlogPost } = {};
+  loadedPosts: { [id: string]: BlogPost } = {};
   viewSnippet: BlogSnippet;
   viewPost: BlogPost;
   topics: string[];
@@ -27,14 +27,14 @@ export class BlogService {
    */
   getSnippets(): Promise<BlogSnippet[]> {
     return new Promise((resolve, reject) => {
-      if(!this.snippets) {
+      if (!this.snippets) {
         // if snippets haven't been loaded, add observable that updates from db
-        this.obs_snippets = this.db.collection('blog_snippets').doc('recent')
+        this.obsSnippets = this.db.collection('blog_snippets').doc('recent')
         .valueChanges();
 
-        this.obs_snippets
+        this.obsSnippets
         .subscribe(snapshot => {
-          let snippets = []
+          const snippets = [];
           for (const el of snapshot.content) {
             snippets.push({
               id: el.id,
@@ -42,15 +42,15 @@ export class BlogService {
               abstract: el.abstract.replace(/<br>/g,  '\n'),
               title: el.title,
               topic: el.topic
-            })
+            });
           }
           this.snippets = snippets;
           resolve(this.snippets);
-        })
+        });
       } else {
         resolve(this.snippets);
       }
-    })
+    });
   }
 
   /**
@@ -61,19 +61,19 @@ export class BlogService {
   getBlogpost(blogId: string): Promise<BlogPost> {
     return new Promise((resolve, reject) => {
       if (!this.loadedPosts[blogId]) {
-        this.db.doc<BlogPost>('blog_posts/'+blogId)
+        this.db.doc<BlogPost>('blog_posts/' + blogId)
         .valueChanges().pipe(take(1))
         .subscribe(post => {
           post.content = post.content.replace(/<br>/g,  '\n');
           this.loadedPosts[blogId] = post;
           this.viewPost = post;
           resolve(this.viewPost);
-        })
+        });
       } else {
         this.viewPost = this.loadedPosts[blogId];
         resolve(this.viewPost);
       }
-    })
+    });
   }
 
   /**
@@ -89,10 +89,10 @@ export class BlogService {
         .subscribe(post => {
           this.topics = post.blog_topics;
           resolve(this.topics);
-        })
+        });
       } else {
         resolve(this.topics);
       }
-    })
+    });
   }
 }
