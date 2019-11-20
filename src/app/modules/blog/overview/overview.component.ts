@@ -42,7 +42,7 @@ export class OverviewComponent implements OnInit {
   async openBlogPost(snippet: BlogSnippet) {
     this.blogService.viewSnippet = snippet;
     await this.blogService.getBlogpost(snippet.id);
-    this.router.navigate(['/blog/post']);
+    this.router.navigate([`/blog/post/${snippet.id}`]);
   }
 
   /**

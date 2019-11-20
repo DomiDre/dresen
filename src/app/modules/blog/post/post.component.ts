@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BlogService } from '../services/blog.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-post',
@@ -11,10 +12,18 @@ export class PostComponent implements OnInit {
 
   constructor(
     public blogService: BlogService,
-    private router: Router) { }
+    private router: Router,
+    private activatedRoute: ActivatedRoute) { }
+
+  postId: string;
+  postId$: Subscription;
 
   ngOnInit() {
-    if (!this.blogService.viewPost) { this.router.navigate(['/blog']); }
+    this.postId$ = this.activatedRoute.paramMap.subscribe(params => {
+      this.postId = params.get('id');
+      this.blogService.getBlogpost(this.postId);
+    });
+    // if (!this.blogService.viewPost) { this.router.navigate(['/blog']); }
   }
 
   /**

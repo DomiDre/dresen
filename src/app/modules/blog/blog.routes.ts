@@ -16,5 +16,9 @@ export const routes: Routes = [
   {
     path: 'post',
     component: PostComponent
+  },
+  {
+    path: 'post/:id',
+    component: PostComponent
   }
 ];
