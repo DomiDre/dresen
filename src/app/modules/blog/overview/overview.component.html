@@ -3,7 +3,9 @@
 	*ngFor="let snippet of blogService.snippets.slice().reverse()">
 		<mat-card-header>
 			<mat-card-title>
-				{{snippet.title}}
+				<span class='clickable' (click)='openBlogPost(snippet)'>
+					{{snippet.title}}
+				</span>
 				<span *ngIf="auth.authState && !auth.authState.isAnonymous">
 					<button mat-icon-button aria-label="Edit button"
 					(click)='editPost(snippet)'>
@@ -28,6 +30,5 @@
 				READ FULL STORY
 			</button>
 		</mat-card-actions>
-
 	</mat-card>
 </div>
