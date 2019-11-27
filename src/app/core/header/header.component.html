@@ -3,7 +3,7 @@
 		<a [routerLink]="['/blog']" class='clickable'>
 			<span>dresen.codes</span>
 		</a>
-		<span *ngIf="auth.authState">
+		<span *ngIf="auth.authState && !auth.authState.isAnonymous">
 				<a [routerLink]="['/admin']">
 					<mat-icon aria-hidden="false" aria-label="add-post" color='accent'
 					matTooltip="Admin Menu">

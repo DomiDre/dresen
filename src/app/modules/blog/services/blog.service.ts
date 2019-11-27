@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { BlogPost, BlogSnippet } from '@shared/models/blog.models';
-
+import { BlogPost, BlogSnippet, Comment, BlogPostComments } from '@shared/models/blog.models';
+import * as firebase from 'firebase/app';
+import { AuthService } from '@shared/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +16,19 @@ export class BlogService {
 
   loadedPosts: { [id: string]: BlogPost } = {};
   viewSnippet: BlogSnippet;
+
   viewPost: BlogPost;
+
+  postLikes$: Subscription;
+  postLikes: number;
+  postComments$: Subscription;
+  postComments: BlogPostComments;
+
   topics: string[];
 
-  constructor(private db: AngularFirestore) { }
+  constructor(
+    private db: AngularFirestore,
+    private auth: AuthService) { }
 
   /**
    * Load blog snippets from Firestore. In case snippets haven't been loaded yet
@@ -64,6 +74,7 @@ export class BlogService {
         this.db.doc<BlogPost>('blog_posts/' + blogId)
         .valueChanges().pipe(take(1))
         .subscribe(post => {
+          console.log('updating post');
           post.content = post.content.replace(/<br>/g,  '\n');
           this.loadedPosts[blogId] = post;
           this.viewPost = post;
@@ -73,6 +84,51 @@ export class BlogService {
         this.viewPost = this.loadedPosts[blogId];
         resolve(this.viewPost);
       }
+    });
+  }
+
+  /**
+   * Called at initializing of post to reset state
+   */
+  resetPostState(): void {
+    if (this.postLikes$) {
+      this.postLikes$.unsubscribe();
+      this.postLikes$ = undefined;
+    }
+    if (this.postComments$) {
+      this.postComments$.unsubscribe();
+      this.postComments$ = undefined;
+    }
+
+    this.postComments = undefined;
+    this.postLikes = undefined;
+
+    this.viewPost = undefined;
+
+  }
+
+  /**
+   * Subscribe & Get number of likes for the currently viewed blog post
+   */
+  getLikes(blogId: string): void {
+    this.postLikes$ = this.db.doc<any>('blog_likes/' + blogId)
+    .valueChanges()
+    .subscribe(likeUpdate => {
+      if (likeUpdate) {
+        this.postLikes = likeUpdate.likes;
+      }
+    });
+  }
+
+
+  /**
+   * Subscribe & Get comments for the currently viewed blog post
+   */
+  getComments(blogId: string): void {
+    this.postComments$ = this.db.doc<any>('blog_comments/' + blogId)
+    .valueChanges()
+    .subscribe(commentUpdate => {
+      this.postComments = commentUpdate;
     });
   }
 
@@ -94,5 +150,63 @@ export class BlogService {
         resolve(this.topics);
       }
     });
+  }
+
+  /**
+   * Add a like to a blog post.
+   */
+  addLike(blogId: string): void {
+    const batch = this.db.firestore.batch();
+
+    const blogPostRef = this.db.doc<BlogPost>('blog_likes/' + blogId).ref;
+    const increment = firebase.firestore.FieldValue.increment(1);
+    batch.set(blogPostRef, {
+      likes: increment,
+    }, { merge: true });
+
+    const uidLikersRef = this.db.doc<BlogPost>(
+      'blog_likes/' + blogId + '/uid_likers/' + this.auth.authState.uid).ref;
+    batch.set(uidLikersRef, {
+      posted: true
+    });
+
+    batch.commit()
+    .then(result => {
+      console.log('Everybody Liked This.');
+    })
+    .catch(error => {
+      console.log('Not allowed.');
+    });
+  }
+
+  /**
+   * Add a comment for to a given blog post.
+   */
+  addComment(blogId: string, comment: Comment): void {
+    const batch = this.db.firestore.batch();
+    const blogCommentsRef =
+      this.db.doc<BlogPostComments>('blog_comments/' + blogId).ref;
+    const increment = firebase.firestore.FieldValue.increment(1);
+    batch.set(
+      blogCommentsRef,
+      {
+        comments: firebase.firestore.FieldValue.arrayUnion(comment),
+        numberOfComments: increment
+      }, { merge: true }
+    );
+
+    const uidCommentersRef = this.db.doc<BlogPost>(
+      'blog_comments/' + blogId + '/uid_commenters/' +
+      this.auth.authState.uid).ref;
+    batch.set(uidCommentersRef, {
+      posted: true
+    });
+
+    batch.commit()
+    .catch(error => {
+      console.log('Not allowed.');
+    });
+
+    console.log(blogId, comment);
   }
 }
