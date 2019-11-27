@@ -1,5 +1,5 @@
-<div class='content-card'>
-	<mat-card style='margin: 10px 0px;' *ngIf="this.blogService.viewPost">
+<div class='content-card' *ngIf="this.blogService.viewPost">
+	<mat-card style='margin: 10px 0px;'>
 		<mat-card-header>
 			<mat-card-title>{{this.blogService.viewPost.title}}</mat-card-title>
 			<mat-card-subtitle>{{this.blogService.viewPost.timestamp | date: 'short'}}</mat-card-subtitle>
@@ -13,4 +13,56 @@
 			<button mat-button (click)='backToOverview()'>BACK TO OVERVIEW</button>
 		</mat-card-actions>
 	</mat-card>
+	<div class='post-footer'>
+		<div class='clickable' (click)="addLike()">
+			&#10084;&#65039; Like 
+			<span *ngIf="this.blogService.postLikes && this.blogService.postLikes > 0">
+				[{{this.blogService.postLikes}}]
+			</span>
+		</div>
+		<div class='clickable' (click)="triggerComments()">
+			<span *ngIf='!showComments'>Show </span>
+			<span *ngIf='showComments'>Hide </span>
+			Comments
+			<span *ngIf="blogService.postComments && blogService.postComments.numberOfComments > 0">
+				[{{blogService.postComments.numberOfComments}}]
+			</span>
+		</div>
+	</div>
+	<div *ngIf='showComments'>
+		<mat-card class='comment-section'
+		*ngIf='blogService.postComments && blogService.postComments.numberOfComments > 0; else noComments'>
+			<mat-card-content>
+				<div *ngFor="let comment of blogService.postComments.comments.slice().reverse()"
+					class='comment-entry'>
+					<div style='font-size: small;'>
+						{{comment.timestamp | date: 'short'}}
+					</div>
+					<div>
+						{{comment.content}}
+					</div>
+				</div>
+			</mat-card-content>
+		</mat-card>
+		<ng-template #noComments>
+			<span style='font-style: italic;'>
+				There are no comments yet for this blog post.
+			</span>
+		</ng-template>
+		<mat-card style='margin-top: 20px;'>
+			<mat-card-content>
+				<mat-form-field class='full-width'>
+					<textarea matInput #writeComment
+					cdkTextareaAutosize
+					#autosize="cdkTextareaAutosize"
+					cdkAutosizeMinRows="1"
+					cdkAutosizeMaxRows="10"
+					placeholder="Leave a Comment"></textarea>
+				</mat-form-field>
+			</mat-card-content>
+			<mat-card-actions align="end">
+				<button mat-button (click)='postComment()'>POST COMMENT</button>
+			</mat-card-actions>
+		</mat-card>
+	</div >
 </div>

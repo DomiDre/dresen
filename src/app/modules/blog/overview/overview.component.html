@@ -4,7 +4,7 @@
 		<mat-card-header>
 			<mat-card-title>
 				{{snippet.title}}
-				<span *ngIf="auth.authState">
+				<span *ngIf="auth.authState && !auth.authState.isAnonymous">
 					<button mat-icon-button aria-label="Edit button"
 					(click)='editPost(snippet)'>
 						<mat-icon aria-hidden="false" aria-label="edit-post"

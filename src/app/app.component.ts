@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { fader } from './animations';
 import { AuthService } from '@shared/services/auth.service';
@@ -11,11 +11,15 @@ import { AuthService } from '@shared/services/auth.service';
     fader
   ]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   constructor(
     private readonly auth: AuthService,
   ) { }
+
+  ngOnInit() {
+    this.auth.logIn();
+  }
 
   prepareRoute(outlet: RouterOutlet): void {
     return outlet

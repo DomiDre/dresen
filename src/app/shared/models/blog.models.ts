@@ -11,4 +11,16 @@ export class BlogPost {
   timestamp: number;
   content: string;
   topic: string;
+  likes?: number;
+  numberComments?: number;
+}
+
+export class Comment {
+  timestamp: number;
+  content: string;
+}
+
+export class BlogPostComments {
+  comments: Comment[];
+  numberOfComments: number;
 }
