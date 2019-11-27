@@ -74,7 +74,6 @@ export class BlogService {
         this.db.doc<BlogPost>('blog_posts/' + blogId)
         .valueChanges().pipe(take(1))
         .subscribe(post => {
-          console.log('updating post');
           post.content = post.content.replace(/<br>/g,  '\n');
           this.loadedPosts[blogId] = post;
           this.viewPost = post;
@@ -155,58 +154,63 @@ export class BlogService {
   /**
    * Add a like to a blog post.
    */
-  addLike(blogId: string): void {
-    const batch = this.db.firestore.batch();
+  addLike(blogId: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      const batch = this.db.firestore.batch();
 
-    const blogPostRef = this.db.doc<BlogPost>('blog_likes/' + blogId).ref;
-    const increment = firebase.firestore.FieldValue.increment(1);
-    batch.set(blogPostRef, {
-      likes: increment,
-    }, { merge: true });
+      const blogPostRef = this.db.doc<BlogPost>('blog_likes/' + blogId).ref;
+      const increment = firebase.firestore.FieldValue.increment(1);
+      batch.set(blogPostRef, {
+        likes: increment,
+      }, { merge: true });
 
-    const uidLikersRef = this.db.doc<BlogPost>(
-      'blog_likes/' + blogId + '/uid_likers/' + this.auth.authState.uid).ref;
-    batch.set(uidLikersRef, {
-      posted: true
-    });
+      const uidLikersRef = this.db.doc<BlogPost>(
+        'blog_likes/' + blogId + '/uid_likers/' + this.auth.authState.uid).ref;
+      batch.set(uidLikersRef, {
+        posted: true
+      });
 
-    batch.commit()
-    .then(result => {
-      console.log('Everybody Liked This.');
-    })
-    .catch(error => {
-      console.log('Not allowed.');
+      batch.commit()
+      .then(result => {
+        resolve(true);
+      })
+      .catch(error => {
+        resolve(false);
+      });
     });
   }
 
   /**
    * Add a comment for to a given blog post.
    */
-  addComment(blogId: string, comment: Comment): void {
-    const batch = this.db.firestore.batch();
-    const blogCommentsRef =
-      this.db.doc<BlogPostComments>('blog_comments/' + blogId).ref;
-    const increment = firebase.firestore.FieldValue.increment(1);
-    batch.set(
-      blogCommentsRef,
-      {
-        comments: firebase.firestore.FieldValue.arrayUnion(comment),
-        numberOfComments: increment
-      }, { merge: true }
-    );
+  addComment(blogId: string, comment: Comment): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      const batch = this.db.firestore.batch();
+      const blogCommentsRef =
+        this.db.doc<BlogPostComments>('blog_comments/' + blogId).ref;
+      const increment = firebase.firestore.FieldValue.increment(1);
+      batch.set(
+        blogCommentsRef,
+        {
+          comments: firebase.firestore.FieldValue.arrayUnion(comment),
+          numberOfComments: increment
+        }, { merge: true }
+      );
 
-    const uidCommentersRef = this.db.doc<BlogPost>(
-      'blog_comments/' + blogId + '/uid_commenters/' +
-      this.auth.authState.uid).ref;
-    batch.set(uidCommentersRef, {
-      posted: true
+      const uidCommentersRef = this.db.doc<BlogPost>(
+        'blog_comments/' + blogId + '/uid_commenters/' +
+        this.auth.authState.uid).ref;
+      batch.set(uidCommentersRef, {
+        posted: true
+      });
+
+      batch.commit()
+      .then(result => {
+        resolve(true);
+      })
+      .catch(error => {
+        resolve(false);
+      });
     });
-
-    batch.commit()
-    .catch(error => {
-      console.log('Not allowed.');
-    });
-
-    console.log(blogId, comment);
   }
 }

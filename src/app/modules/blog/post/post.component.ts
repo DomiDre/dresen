@@ -20,12 +20,16 @@ export class PostComponent implements OnInit {
   postId: string;
   postId$: Subscription;
   showComments = false;
+  likeResponse: string;
+  commentResponse: string;
 
   ngOnInit() {
     this.postId$ = this.activatedRoute.paramMap.subscribe(params => {
       // this function is always called when blog post is opened, if it is by
       // creation of the component or by routing
       this.blogService.resetPostState();
+      this.likeResponse = undefined;
+      this.commentResponse = undefined;
       this.postId = params.get('id'); // get id of the blog post
 
       // get content of blog post, sets blogService.viewPost
@@ -50,7 +54,11 @@ export class PostComponent implements OnInit {
    * Add like to a post
    */
   addLike() {
-    this.blogService.addLike(this.postId);
+    this.blogService.addLike(this.postId)
+    .then(succeeded => {
+      this.likeResponse = succeeded ? 'Thank you for the like!' :
+        'One like at a time. But thanks anyway!';
+    });
   }
 
   /**
@@ -73,6 +81,9 @@ export class PostComponent implements OnInit {
     this.blogService.addComment(this.postId, {
       timestamp,
       content
+    }).then(succeeded => {
+      this.commentResponse = succeeded ? 'Comment submitted.' :
+        'Already commented.';
     });
   }
 }

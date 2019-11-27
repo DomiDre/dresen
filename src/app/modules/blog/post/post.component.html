@@ -14,11 +14,16 @@
 		</mat-card-actions>
 	</mat-card>
 	<div class='post-footer'>
-		<div class='clickable' (click)="addLike()">
-			&#10084;&#65039; Like 
-			<span *ngIf="this.blogService.postLikes && this.blogService.postLikes > 0">
-				[{{this.blogService.postLikes}}]
-			</span>
+		<div>
+			<div class='clickable' (click)="addLike()">
+				&#10084;&#65039; Like 
+				<span *ngIf="this.blogService.postLikes && this.blogService.postLikes > 0">
+					[{{this.blogService.postLikes}}]
+				</span>
+			</div>
+			<div *ngIf='likeResponse' class='like-response'>
+				{{likeResponse}}
+			</div>
 		</div>
 		<div class='clickable' (click)="triggerComments()">
 			<span *ngIf='!showComments'>Show </span>
@@ -61,7 +66,10 @@
 				</mat-form-field>
 			</mat-card-content>
 			<mat-card-actions align="end">
-				<button mat-button (click)='postComment()'>POST COMMENT</button>
+				<div>
+					<button mat-button (click)='postComment()'>POST COMMENT</button>
+					<div *ngIf="commentResponse" class='like-response'>{{commentResponse}}</div>
+				</div>
 			</mat-card-actions>
 		</mat-card>
 	</div >
